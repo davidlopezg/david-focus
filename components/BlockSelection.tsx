@@ -12,9 +12,9 @@ interface BlockSelectionProps {
 const BlockSelection: React.FC<BlockSelectionProps> = ({ blocks, activeBreaks, onSelect, onSelectBreak }) => {
   return (
     <div className="h-full overflow-y-auto px-4 py-6 md:px-8 lg:px-12 bg-background-light dark:bg-background-dark">
-      <div className="w-full max-w-5xl mx-auto flex flex-col gap-8">
+      <div className="w-full max-w-5xl mx-auto flex flex-col gap-6">
         {/* Title Section */}
-        <div className="flex flex-col items-center text-center gap-3 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="flex flex-col items-center text-center gap-2 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <h1 className="text-[#0d121c] dark:text-white text-3xl md:text-4xl font-black leading-tight tracking-tight">
             ¿Cuál es tu nivel de energía?
           </h1>
@@ -46,6 +46,37 @@ const BlockSelection: React.FC<BlockSelectionProps> = ({ blocks, activeBreaks, o
                 </p>
               </div>
             </button>
+          ))}
+        </div>
+
+        {/* Block Details */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
+          {blocks.map((block) => (
+            <div key={block.id} className="bg-white dark:bg-[#1e293b] rounded-xl p-4 border border-gray-100 dark:border-gray-800">
+              <div className="flex items-center gap-2 mb-3">
+                <div className={`w-2 h-2 rounded-full ${block.bgColor}`} />
+                <h3 className="text-sm font-bold text-[#0d121c] dark:text-white">{block.title}</h3>
+              </div>
+              <p className="text-xs text-primary font-medium mb-3">{block.whenToUse}</p>
+              <div className="space-y-2">
+                <div>
+                  <p className="text-[10px] font-bold text-green-600 uppercase tracking-wider">✓ Sí incluye</p>
+                  <ul className="mt-1 space-y-0.5">
+                    {block.includes.slice(0, 3).map((item, i) => (
+                      <li key={i} className="text-xs text-gray-600 dark:text-gray-400">{item}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold text-red-500 uppercase tracking-wider">✗ No incluye</p>
+                  <ul className="mt-1 space-y-0.5">
+                    {block.excludes.slice(0, 2).map((item, i) => (
+                      <li key={i} className="text-xs text-gray-500 dark:text-gray-500">{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
 

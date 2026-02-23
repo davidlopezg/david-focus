@@ -10,7 +10,21 @@ export const ENERGY_BLOCKS: EnergyBlock[] = [
     icon: 'spa',
     bgColor: 'bg-emerald-500',
     textColor: 'text-white',
-    defaultDuration: 25
+    defaultDuration: 25,
+    whenToUse: 'Una vez al día, cuando necesites arrancar o combatir el cansancio',
+    includes: [
+      'Actividad física ligera',
+      'Respiración consciente',
+      'Leer o repasar',
+      'Pensar por escrito',
+      'Elegir tareas del día',
+      'Preparar el entorno'
+    ],
+    excludes: [
+      'Tareas de alta carga',
+      'Decisiones importantes',
+      'Trabajo profundo'
+    ]
   },
   {
     id: BlockType.ESTRATEGIA,
@@ -20,7 +34,21 @@ export const ENERGY_BLOCKS: EnergyBlock[] = [
     icon: 'lightbulb',
     bgColor: 'bg-violet-500',
     textColor: 'text-white',
-    defaultDuration: 45
+    defaultDuration: 45,
+    whenToUse: 'Máx. 2 veces por semana, solo si estás bien mentalmente',
+    includes: [
+      'Reflexiones personales',
+      'Pensar estrategias',
+      'Revisar rumbo del negocio',
+      'Vaciar la cabeza',
+      'Decidir prioridades',
+      'Convertir caos en decisiones'
+    ],
+    excludes: [
+      'Tareas operativas',
+      'Responder emails',
+      'Trabajo de ejecución'
+    ]
   },
   {
     id: BlockType.EJECUCION,
@@ -30,7 +58,21 @@ export const ENERGY_BLOCKS: EnergyBlock[] = [
     icon: 'bolt',
     bgColor: 'bg-primary',
     textColor: 'text-white',
-    defaultDuration: 90
+    defaultDuration: 90,
+    whenToUse: 'Todos los días si te sientes bien mentalmente',
+    includes: [
+      'Escribir emails concretos',
+      'Resolver tareas definidas',
+      'Avanzar documentos',
+      'Tomar decisiones acordadas',
+      'Revisiones numéricas'
+    ],
+    excludes: [
+      'Pensar qué hacer',
+      'Ordenar ideas abiertas',
+      'Tareas emocionales',
+      'Planificación'
+    ]
   },
   {
     id: BlockType.MECANICA,
@@ -40,7 +82,20 @@ export const ENERGY_BLOCKS: EnergyBlock[] = [
     icon: 'build',
     bgColor: 'bg-amber-400',
     textColor: 'text-amber-950',
-    defaultDuration: 20
+    defaultDuration: 20,
+    whenToUse: 'Todos los días si estás bien mentalmente',
+    includes: [
+      'Gestiones repetitivas',
+      'Producción rutinaria',
+      'Trámites simples',
+      'Organizar archivos',
+      'Actualizar listas'
+    ],
+    excludes: [
+      'Estrategias',
+      'Decisiones importantes',
+      'Trabajo creativo fino'
+    ]
   }
 ];
 

@@ -30,6 +30,9 @@ export interface EnergyBlock {
   bgColor: string;
   textColor: string;
   defaultDuration: number;
+  whenToUse: string;
+  includes: string[];
+  excludes: string[];
 }
 
 export interface ActiveBreak {
