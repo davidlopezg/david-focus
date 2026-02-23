@@ -53,7 +53,8 @@ export const ACTIVE_BREAKS: ActiveBreak[] = [
     icon: 'directions_walk',
     color: 'bg-emerald-500',
     bgColor: 'bg-[#f0faf5]',
-    placeholder: 'Ej. Dar una vuelta a la manzana...'
+    placeholder: 'Ej. Dar una vuelta a la manzana...',
+    defaultDuration: 5
   },
   {
     id: ActiveBreakType.WATER,
@@ -63,7 +64,8 @@ export const ACTIVE_BREAKS: ActiveBreak[] = [
     icon: 'water_drop',
     color: 'bg-[#0ea5e9]',
     bgColor: 'bg-[#f0f9ff]',
-    placeholder: 'Beber agua tranquilamente'
+    placeholder: 'Beber agua tranquilamente',
+    defaultDuration: 2
   },
   {
     id: ActiveBreakType.EYES,
@@ -73,7 +75,8 @@ export const ACTIVE_BREAKS: ActiveBreak[] = [
     icon: 'center_focus_strong',
     color: 'bg-[#6366f1]',
     bgColor: 'bg-[#f5f5f0]',
-    placeholder: 'Descanso visual profundo'
+    placeholder: 'Descanso visual profundo',
+    defaultDuration: 5
   },
   {
     id: ActiveBreakType.CUSTOM,
@@ -83,7 +86,8 @@ export const ACTIVE_BREAKS: ActiveBreak[] = [
     icon: 'more_horiz',
     color: 'bg-[#0f172a]',
     bgColor: 'bg-[#f8fafc]',
-    placeholder: ''
+    placeholder: '',
+    defaultDuration: 10
   }
 ];
 
