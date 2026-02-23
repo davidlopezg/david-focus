@@ -41,6 +41,7 @@ export interface ActiveBreak {
   color: string;
   bgColor: string;
   placeholder: string;
+  defaultDuration: number;
 }
 
 export interface SessionRecord {
