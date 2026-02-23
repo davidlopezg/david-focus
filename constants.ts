@@ -18,7 +18,7 @@ export const ENERGY_BLOCKS: EnergyBlock[] = [
     description: 'Planificación y visión a largo plazo. Mente clara.',
     colorClass: 'bg-white dark:bg-[#1e293b]',
     icon: 'lightbulb',
-    bgColor: 'bg-slate-100 dark:bg-slate-900',
+    bgColor: 'bg-slate-200 dark:bg-slate-800',
     textColor: 'text-slate-900 dark:text-white',
     defaultDuration: 45
   },

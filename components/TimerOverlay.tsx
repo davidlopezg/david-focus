@@ -14,32 +14,40 @@ const TimerOverlay: React.FC<TimerOverlayProps> = ({ block, onClose }) => {
   const [task, setTask] = useState('');
   const [isFinished, setIsFinished] = useState(false);
   const timerRef = useRef<number | null>(null);
+  const taskRef = useRef(task);
+  const blockRef = useRef(block);
+
+  useEffect(() => {
+    taskRef.current = task;
+  }, [task]);
+
+  useEffect(() => {
+    blockRef.current = block;
+  }, [block]);
 
   useEffect(() => {
     if (isRunning && timeLeft > 0) {
       timerRef.current = window.setInterval(() => {
         setTimeLeft((prev) => prev - 1);
       }, 1000);
-    } else if (timeLeft === 0) {
+    } else if (timeLeft === 0 && !isFinished) {
       setIsRunning(false);
       setIsFinished(true);
       if (timerRef.current) window.clearInterval(timerRef.current);
 
-      // Record session to n8n
-      // Record session to n8n
       api.recordSession({
-        type: block.id,
-        title: block.title,
-        duration: Math.round((block.defaultDuration * 60 - timeLeft) / 60) || block.defaultDuration,
-        task: task,
-        efficiency: 100 // Default efficiency for completed blocks
+        type: blockRef.current.id,
+        title: blockRef.current.title,
+        duration: blockRef.current.defaultDuration,
+        task: taskRef.current,
+        efficiency: 100
       });
     }
 
     return () => {
       if (timerRef.current) window.clearInterval(timerRef.current);
     };
-  }, [isRunning, timeLeft]);
+  }, [isRunning, timeLeft, isFinished]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);

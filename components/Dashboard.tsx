@@ -21,8 +21,8 @@ const Dashboard: React.FC = () => {
     async function loadStats() {
       try {
         const data = await api.fetchStats();
-        console.log("Dashboard received data:", data); // Debug log
-        if (data && Array.isArray(data.sessions) && data.summary) {
+        console.log("Dashboard received data:", data);
+        if (data && data.sessions && Array.isArray(data.sessions) && data.summary) {
           setSessions(data.sessions);
           setSummary(data.summary);
         } else {

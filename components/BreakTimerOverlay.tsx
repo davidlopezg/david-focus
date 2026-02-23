@@ -14,29 +14,32 @@ const BreakTimerOverlay: React.FC<BreakTimerOverlayProps> = ({ activeBreak, onCl
   const [customTitle, setCustomTitle] = useState('');
   const [isFinished, setIsFinished] = useState(false);
   const timerRef = useRef<number | null>(null);
+  const activeBreakRef = useRef(activeBreak);
+
+  useEffect(() => {
+    activeBreakRef.current = activeBreak;
+  }, [activeBreak]);
 
   useEffect(() => {
     if (isRunning && timeLeft > 0) {
       timerRef.current = window.setInterval(() => {
         setTimeLeft((prev) => prev - 1);
       }, 1000);
-    } else if (timeLeft === 0) {
+    } else if (timeLeft === 0 && !isFinished) {
       setIsRunning(false);
       setIsFinished(true);
       if (timerRef.current) window.clearInterval(timerRef.current);
 
-      // Record break to n8n
-      // Record break to n8n
       api.recordBreak({
-        type: activeBreak.id,
-        title: activeBreak.title,
-        duration: 5 // Default break duration
+        type: activeBreakRef.current.id,
+        title: activeBreakRef.current.title,
+        duration: 5
       });
     }
     return () => {
       if (timerRef.current) window.clearInterval(timerRef.current);
     };
-  }, [isRunning, timeLeft]);
+  }, [isRunning, timeLeft, isFinished]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
