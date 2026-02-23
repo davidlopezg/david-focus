@@ -5,7 +5,7 @@ export const ENERGY_BLOCKS: EnergyBlock[] = [
   {
     id: BlockType.REGULAR,
     title: 'Regular',
-    description: 'Energía sostenible para el día a día. Ritmo constante.',
+    description: 'Energía sostenible para el día a día',
     colorClass: 'bg-emerald-500',
     icon: 'spa',
     bgColor: 'bg-emerald-500',
@@ -15,17 +15,17 @@ export const ENERGY_BLOCKS: EnergyBlock[] = [
   {
     id: BlockType.ESTRATEGIA,
     title: 'Estrategia',
-    description: 'Planificación y visión a largo plazo. Mente clara.',
-    colorClass: 'bg-white dark:bg-[#1e293b]',
+    description: 'Planificación y visión a largo plazo',
+    colorClass: 'bg-violet-500',
     icon: 'lightbulb',
-    bgColor: 'bg-slate-200 dark:bg-slate-800',
-    textColor: 'text-slate-900 dark:text-white',
+    bgColor: 'bg-violet-500',
+    textColor: 'text-white',
     defaultDuration: 45
   },
   {
     id: BlockType.EJECUCION,
     title: 'Ejecución',
-    description: 'Alta intensidad y foco profundo. Tareas críticas.',
+    description: 'Alta intensidad y foco profundo',
     colorClass: 'bg-primary',
     icon: 'bolt',
     bgColor: 'bg-primary',
@@ -35,7 +35,7 @@ export const ENERGY_BLOCKS: EnergyBlock[] = [
   {
     id: BlockType.MECANICA,
     title: 'Mecánica',
-    description: 'Tareas repetitivas y mantenimiento. Baja carga mental.',
+    description: 'Tareas repetitivas de bajo esfuerzo',
     colorClass: 'bg-amber-400',
     icon: 'build',
     bgColor: 'bg-amber-400',
