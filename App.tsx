@@ -9,19 +9,19 @@ import BreakTimerOverlay from './components/BreakTimerOverlay';
 import Settings from './components/Settings';
 import { ENERGY_BLOCKS, ACTIVE_BREAKS } from './constants';
 
-import { api, N8nConfig } from './services/api';
+import { api, SupabaseConfig } from './services/api';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>(View.DASHBOARD);
   const [blocks, setBlocks] = useState<EnergyBlock[]>(ENERGY_BLOCKS);
   const [activeBreaks, setActiveBreaks] = useState<ActiveBreak[]>(ACTIVE_BREAKS);
-  const [n8nConfig, setN8nConfig] = useState<N8nConfig>(() => api.getConfig());
+  const [supabaseConfig, setSupabaseConfig] = useState<SupabaseConfig>(() => api.getConfig());
   const [activeBlock, setActiveBlock] = useState<EnergyBlock | null>(null);
   const [activeBreak, setActiveBreak] = useState<ActiveBreak | null>(null);
 
   useEffect(() => {
-    api.setConfig(n8nConfig);
-  }, [n8nConfig]);
+    api.setConfig(supabaseConfig);
+  }, [supabaseConfig]);
 
   const handleSelectBlock = useCallback((blockId: BlockType) => {
     const block = blocks.find(b => b.id === blockId);
@@ -73,8 +73,8 @@ const App: React.FC = () => {
             onUpdateBlock={handleUpdateBlock}
             activeBreaks={activeBreaks}
             onUpdateBreak={handleUpdateBreak}
-            n8nConfig={n8nConfig}
-            onUpdateN8nConfig={setN8nConfig}
+            supabaseConfig={supabaseConfig}
+            onUpdateSupabaseConfig={setSupabaseConfig}
           />
         );
       case View.TIMER:
