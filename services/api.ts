@@ -1,7 +1,5 @@
 
-import { BlockType, ActiveBreakType, EnergyBlock, SessionRecord } from '../types';
-
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient, User, Session } from '@supabase/supabase-js';
 import { BlockType, ActiveBreakType, SessionRecord } from '../types';
 
 export interface SupabaseConfig {
@@ -11,38 +9,67 @@ export interface SupabaseConfig {
 
 const STORAGE_KEY = 'david_focus_supabase_config';
 
+// Try to get from env first, then storage
+const DEFAULT_URL = import.meta.env.VITE_SUPABASE_URL || '';
+const DEFAULT_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+
 class ApiService {
-    private config: SupabaseConfig | null = null;
-    private supabase: SupabaseClient | null = null;
+    private config: SupabaseConfig;
+    private supabase: SupabaseClient;
 
     constructor() {
-        try {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            if (stored) {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+            try {
                 this.config = JSON.parse(stored);
-                this.initSupabase();
+            } catch (e) {
+                this.config = { url: DEFAULT_URL, anonKey: DEFAULT_KEY };
             }
-        } catch (e) {
-            console.warn('Failed to access localStorage or init Supabase', e);
+        } else {
+            this.config = { url: DEFAULT_URL, anonKey: DEFAULT_KEY };
         }
-    }
 
-    private initSupabase() {
-        if (this.config?.url && this.config?.anonKey) {
-            this.supabase = createClient(this.config.url, this.config.anonKey);
-        }
+        this.supabase = createClient(this.config.url, this.config.anonKey);
     }
 
     getConfig(): SupabaseConfig {
-        return this.config || { url: '', anonKey: '' };
+        return this.config;
     }
 
     setConfig(config: SupabaseConfig) {
         this.config = config;
         localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
-        this.initSupabase();
+        this.supabase = createClient(this.config.url, this.config.anonKey);
     }
 
+    // AUTH METHODS
+    async signUp(email: string, password: string) {
+        return await this.supabase.auth.signUp({ email, password });
+    }
+
+    async signIn(email: string, password: string) {
+        return await this.supabase.auth.signInWithPassword({ email, password });
+    }
+
+    async signOut() {
+        return await this.supabase.auth.signOut();
+    }
+
+    async getUser(): Promise<User | null> {
+        const { data } = await this.supabase.auth.getUser();
+        return data.user;
+    }
+
+    async getSession(): Promise<Session | null> {
+        const { data } = await this.supabase.auth.getSession();
+        return data.session;
+    }
+
+    onAuthStateChange(callback: (event: string, session: Session | null) => void) {
+        return this.supabase.auth.onAuthStateChange(callback);
+    }
+
+    // DATA METHODS
     async recordSession(session: {
         type: BlockType;
         title: string;
@@ -50,16 +77,13 @@ class ApiService {
         task: string;
         efficiency: number;
     }) {
-        if (!this.supabase) {
-            console.warn('Supabase not configured');
-            return false;
-        }
-
         try {
+            const user = await this.getUser();
             const { error } = await this.supabase
                 .from('sessions')
                 .insert([{
                     ...session,
+                    user_id: user?.id,
                     timestamp: new Date().toISOString()
                 }]);
 
@@ -76,16 +100,13 @@ class ApiService {
         title: string;
         duration: number;
     }) {
-        if (!this.supabase) {
-            console.warn('Supabase not configured');
-            return false;
-        }
-
         try {
+            const user = await this.getUser();
             const { error } = await this.supabase
                 .from('breaks')
                 .insert([{
                     ...activeBreak,
+                    user_id: user?.id,
                     timestamp: new Date().toISOString()
                 }]);
 
@@ -106,11 +127,6 @@ class ApiService {
             avgDuration: string;
         }
     } | null> {
-        if (!this.supabase) {
-            console.warn('Supabase not configured');
-            return null;
-        }
-
         try {
             const { data: rawData, error } = await this.supabase
                 .from('sessions')
@@ -121,7 +137,6 @@ class ApiService {
             if (error) throw error;
 
             if (rawData && Array.isArray(rawData)) {
-                // 1. Map to SessionRecord
                 const sessions: SessionRecord[] = rawData.map((item: any) => ({
                     id: String(item.id || Math.random()),
                     type: item.type as BlockType,
@@ -133,23 +148,19 @@ class ApiService {
                     }) : 'Reciente'
                 }));
 
-                // 2. Calculate Summary
                 const totalMinutes = sessions.reduce((acc, s) => acc + s.duration, 0);
                 const completedBlocks = sessions.length;
 
-                // Top Block
                 const typeCounts: Record<string, number> = {};
                 sessions.forEach(s => {
                     typeCounts[s.type] = (typeCounts[s.type] || 0) + 1;
                 });
                 const topBlockType = Object.entries(typeCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || 'N/A';
 
-                // Format Total Time
                 const hours = Math.floor(totalMinutes / 60);
                 const mins = totalMinutes % 60;
                 const totalTime = hours > 0 ? `${hours}h ${mins}m` : `${mins} min`;
 
-                // Format Avg Duration
                 const avgMins = completedBlocks > 0 ? Math.round(totalMinutes / completedBlocks) : 0;
 
                 return {

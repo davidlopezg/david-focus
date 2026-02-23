@@ -5,9 +5,10 @@ import { View } from '../types';
 interface SidebarProps {
   currentView: View;
   onNavigate: (view: View) => void;
+  onSignOut: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ currentView, onNavigate }) => {
+const Sidebar: React.FC<SidebarProps> = ({ currentView, onNavigate, onSignOut }) => {
   const menuItems = [
     { id: View.SELECTION, label: 'Bloques', icon: 'view_agenda' },
     { id: View.DASHBOARD, label: 'Estadísticas', icon: 'bar_chart' },
@@ -34,8 +35,8 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onNavigate }) => {
               key={item.label}
               onClick={() => onNavigate(item.id)}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group ${currentView === item.id
-                  ? 'bg-primary/10 text-primary dark:bg-primary/20'
-                  : 'text-[#49659c] dark:text-gray-400 hover:bg-[#f0f4fa] dark:hover:bg-gray-800'
+                ? 'bg-primary/10 text-primary dark:bg-primary/20'
+                : 'text-[#49659c] dark:text-gray-400 hover:bg-[#f0f4fa] dark:hover:bg-gray-800'
                 }`}
             >
               <span className={`material-symbols-outlined text-[22px] transition-colors ${currentView === item.id ? 'fill-icon' : 'group-hover:text-primary'
@@ -55,8 +56,8 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onNavigate }) => {
           <button
             onClick={() => onNavigate(View.SETTINGS)}
             className={`flex w-full items-center gap-3 px-3 py-2.5 rounded-lg transition-colors group ${currentView === View.SETTINGS
-                ? 'bg-primary/10 text-primary dark:bg-primary/20'
-                : 'text-[#49659c] dark:text-gray-400 hover:bg-[#f0f4fa] dark:hover:bg-gray-800'
+              ? 'bg-primary/10 text-primary dark:bg-primary/20'
+              : 'text-[#49659c] dark:text-gray-400 hover:bg-[#f0f4fa] dark:hover:bg-gray-800'
               }`}
           >
             <span className={`material-symbols-outlined text-[22px] transition-colors ${currentView === View.SETTINGS ? 'fill-icon' : 'group-hover:text-primary'
@@ -68,16 +69,27 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onNavigate }) => {
               Configuración
             </p>
           </button>
-          <div className="flex items-center gap-3 px-3 py-3 mt-2">
-            <img
-              src="https://picsum.photos/seed/david/80/80"
-              className="size-8 rounded-full ring-2 ring-gray-100 dark:ring-gray-700"
-              alt="Avatar"
-            />
-            <div className="flex flex-col text-left">
-              <p className="text-sm font-medium text-[#0d121c] dark:text-white">David M.</p>
-              <p className="text-xs text-[#49659c] dark:text-gray-400">Pro Plan</p>
+
+          <div className="flex items-center justify-between gap-2 px-1 py-3 mt-2">
+            <div className="flex items-center gap-3">
+              <img
+                src="https://picsum.photos/seed/david/80/80"
+                className="size-8 rounded-full ring-2 ring-gray-100 dark:ring-gray-700"
+                alt="Avatar"
+              />
+              <div className="flex flex-col text-left">
+                <p className="text-sm font-medium text-[#0d121c] dark:text-white">David M.</p>
+                <p className="text-xs text-[#49659c] dark:text-gray-400">Pro Plan</p>
+              </div>
             </div>
+
+            <button
+              onClick={onSignOut}
+              className="p-2 text-[#49659c] hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-all"
+              title="Cerrar sesión"
+            >
+              <span className="material-symbols-outlined text-[20px]">logout</span>
+            </button>
           </div>
         </div>
       </div>
