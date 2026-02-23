@@ -9,7 +9,7 @@ interface BreakTimerOverlayProps {
 }
 
 const BreakTimerOverlay: React.FC<BreakTimerOverlayProps> = ({ activeBreak, onClose }) => {
-  const [timeLeft, setTimeLeft] = useState(5 * 60);
+  const [timeLeft, setTimeLeft] = useState(activeBreak.defaultDuration * 60);
   const [isRunning, setIsRunning] = useState(false);
   const [customTitle, setCustomTitle] = useState('');
   const [isFinished, setIsFinished] = useState(false);
@@ -53,7 +53,7 @@ const BreakTimerOverlay: React.FC<BreakTimerOverlayProps> = ({ activeBreak, onCl
 
   const isWater = activeBreak.id === ActiveBreakType.WATER;
   const isCustom = activeBreak.id === ActiveBreakType.CUSTOM;
-  const progress = (timeLeft / (5 * 60)) * 100;
+  const progress = (timeLeft / (activeBreak.defaultDuration * 60)) * 100;
 
   if (isFinished) {
     return (

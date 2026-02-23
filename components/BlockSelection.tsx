@@ -1,15 +1,15 @@
 
 import React from 'react';
-import { ACTIVE_BREAKS } from '../constants';
-import { BlockType, ActiveBreakType, EnergyBlock } from '../types';
+import { BlockType, ActiveBreakType, EnergyBlock, ActiveBreak } from '../types';
 
 interface BlockSelectionProps {
   blocks: EnergyBlock[];
+  activeBreaks: ActiveBreak[];
   onSelect: (type: BlockType) => void;
   onSelectBreak: (type: ActiveBreakType) => void;
 }
 
-const BlockSelection: React.FC<BlockSelectionProps> = ({ blocks, onSelect, onSelectBreak }) => {
+const BlockSelection: React.FC<BlockSelectionProps> = ({ blocks, activeBreaks, onSelect, onSelectBreak }) => {
   return (
     <div className="h-full overflow-y-auto px-6 py-8 md:px-10 lg:px-20 bg-background-light dark:bg-background-dark">
       <div className="w-full max-w-6xl mx-auto flex flex-col gap-10">
@@ -59,10 +59,9 @@ const BlockSelection: React.FC<BlockSelectionProps> = ({ blocks, onSelect, onSel
         <div className="flex flex-col gap-4 w-full mt-4 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300">
           <div className="flex items-center gap-3 mb-1 px-1">
             <h2 className="text-[#0d121c] dark:text-white text-xl font-bold">Pausas Activas</h2>
-            <span className="px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs font-semibold uppercase">5 MIN</span>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
-            {ACTIVE_BREAKS.map((item) => (
+            {activeBreaks.map((item) => (
               <button
                 key={item.id}
                 onClick={() => onSelectBreak(item.id)}
@@ -73,11 +72,7 @@ const BlockSelection: React.FC<BlockSelectionProps> = ({ blocks, onSelect, onSel
                 </div>
                 <div className="text-left md:text-center">
                   <span className="block font-semibold text-gray-800 dark:text-gray-100 text-sm md:text-base mb-0.5">{item.id === ActiveBreakType.CUSTOM ? 'Personalizada' : item.title}</span>
-                  <span className="block text-xs text-gray-500 dark:text-gray-400 font-medium">
-                    {item.id === ActiveBreakType.WALK ? 'Movimiento' :
-                      item.id === ActiveBreakType.WATER ? 'Hidratación' :
-                        item.id === ActiveBreakType.EYES ? 'Descanso visual' : 'Otro'}
-                  </span>
+                  <span className="block text-xs text-gray-500 dark:text-gray-400 font-medium">{item.defaultDuration} min</span>
                 </div>
               </button>
             ))}

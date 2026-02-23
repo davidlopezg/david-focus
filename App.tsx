@@ -14,6 +14,7 @@ import { api, N8nConfig } from './services/api';
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>(View.DASHBOARD);
   const [blocks, setBlocks] = useState<EnergyBlock[]>(ENERGY_BLOCKS);
+  const [activeBreaks, setActiveBreaks] = useState<ActiveBreak[]>(ACTIVE_BREAKS);
   const [n8nConfig, setN8nConfig] = useState<N8nConfig>(() => api.getConfig());
   const [activeBlock, setActiveBlock] = useState<EnergyBlock | null>(null);
   const [activeBreak, setActiveBreak] = useState<ActiveBreak | null>(null);
@@ -34,13 +35,17 @@ const App: React.FC = () => {
     setBlocks(prev => prev.map(b => b.id === updatedBlock.id ? updatedBlock : b));
   }, []);
 
+  const handleUpdateBreak = useCallback((updatedBreak: ActiveBreak) => {
+    setActiveBreaks(prev => prev.map(b => b.id === updatedBreak.id ? updatedBreak : b));
+  }, []);
+
   const handleSelectBreak = useCallback((breakId: ActiveBreakType) => {
-    const breakData = ACTIVE_BREAKS.find(b => b.id === breakId);
+    const breakData = activeBreaks.find(b => b.id === breakId);
     if (breakData) {
       setActiveBreak(breakData);
       setCurrentView(View.BREAK_TIMER);
     }
-  }, []);
+  }, [activeBreaks]);
 
   const handleCloseSession = useCallback(() => {
     setCurrentView(View.SELECTION);
@@ -56,6 +61,7 @@ const App: React.FC = () => {
         return (
           <BlockSelection
             blocks={blocks}
+            activeBreaks={activeBreaks}
             onSelect={handleSelectBlock}
             onSelectBreak={handleSelectBreak}
           />
@@ -65,6 +71,8 @@ const App: React.FC = () => {
           <Settings
             blocks={blocks}
             onUpdateBlock={handleUpdateBlock}
+            activeBreaks={activeBreaks}
+            onUpdateBreak={handleUpdateBreak}
             n8nConfig={n8nConfig}
             onUpdateN8nConfig={setN8nConfig}
           />
