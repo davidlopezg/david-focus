@@ -12,7 +12,7 @@ interface BlockSelectionProps {
 const BlockSelection: React.FC<BlockSelectionProps> = ({ blocks, activeBreaks, onSelect, onSelectBreak }) => {
   return (
     <div className="h-full overflow-y-auto px-4 py-6 md:px-8 lg:px-12 bg-background-light dark:bg-background-dark">
-      <div className="w-full max-w-5xl mx-auto flex flex-col gap-6">
+      <div className="w-full max-w-6xl mx-auto flex flex-col gap-8">
         {/* Title Section */}
         <div className="flex flex-col items-center text-center gap-2 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <h1 className="text-[#0d121c] dark:text-white text-3xl md:text-4xl font-black leading-tight tracking-tight">
@@ -23,60 +23,54 @@ const BlockSelection: React.FC<BlockSelectionProps> = ({ blocks, activeBreaks, o
           </p>
         </div>
 
-        {/* Energy Blocks Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 w-full animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100">
+        {/* Energy Blocks - Full Details */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
           {blocks.map((block) => (
             <button
               key={block.id}
               onClick={() => onSelect(block.id)}
-              className={`group relative flex flex-col items-start justify-between p-4 md:p-5 h-40 md:h-44 rounded-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-xl overflow-hidden text-left border-2 border-transparent hover:border-primary/30 ${block.bgColor}`}
+              className={`group relative flex flex-col text-left p-5 rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-xl border-2 border-transparent hover:border-primary/30 ${block.bgColor}`}
             >
-              <span className={`material-symbols-outlined absolute -right-4 -bottom-4 text-[100px] opacity-15 group-hover:scale-110 transition-transform duration-500 ${block.textColor}`}>
-                {block.icon}
-              </span>
-
-              <div className={`p-2 rounded-lg backdrop-blur-sm bg-white/20 text-white`}>
-                <span className="material-symbols-outlined text-xl">{block.icon}</span>
+              {/* Header */}
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <div className={`p-2 rounded-lg bg-white/20 backdrop-blur-sm`}>
+                    <span className={`material-symbols-outlined text-2xl ${block.textColor}`}>{block.icon}</span>
+                  </div>
+                  <div>
+                    <h3 className={`text-xl font-bold ${block.textColor}`}>{block.title}</h3>
+                    <span className={`text-xs font-medium opacity-75 ${block.textColor}`}>{block.defaultDuration} min</span>
+                  </div>
+                </div>
+                <span className={`material-symbols-outlined ${block.textColor} opacity-50 group-hover:opacity-100`}>arrow_forward</span>
               </div>
 
-              <div className="z-10">
-                <h3 className={`text-lg md:text-xl font-bold mb-0.5 ${block.textColor}`}>{block.title}</h3>
-                <p className={`text-xs md:text-sm font-medium opacity-90 ${block.textColor}`}>
-                  {block.defaultDuration} min
-                </p>
+              {/* When to use */}
+              <div className={`mb-3 px-3 py-2 rounded-lg bg-white/10 backdrop-blur-sm`}>
+                <p className={`text-xs font-bold uppercase tracking-wider opacity-70 ${block.textColor} mb-0.5`}>Cuándo usarlo</p>
+                <p className={`text-sm font-medium ${block.textColor}`}>{block.whenToUse}</p>
+              </div>
+
+              {/* Includes / Excludes */}
+              <div className="grid grid-cols-2 gap-2">
+                <div className="px-2 py-1.5 rounded bg-white/10">
+                  <p className={`text-[10px] font-bold uppercase tracking-wider opacity-70 ${block.textColor} mb-1`}>✓ Sí incluye</p>
+                  <ul className={`text-xs ${block.textColor} opacity-90 space-y-0.5`}>
+                    {block.includes.slice(0, 4).map((item, i) => (
+                      <li key={i}>• {item}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="px-2 py-1.5 rounded bg-white/10">
+                  <p className={`text-[10px] font-bold uppercase tracking-wider opacity-70 ${block.textColor} mb-1`}>✗ No incluye</p>
+                  <ul className={`text-xs ${block.textColor} opacity-70 space-y-0.5`}>
+                    {block.excludes.slice(0, 4).map((item, i) => (
+                      <li key={i}>• {item}</li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </button>
-          ))}
-        </div>
-
-        {/* Block Details */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
-          {blocks.map((block) => (
-            <div key={block.id} className="bg-white dark:bg-[#1e293b] rounded-xl p-4 border border-gray-100 dark:border-gray-800">
-              <div className="flex items-center gap-2 mb-3">
-                <div className={`w-2 h-2 rounded-full ${block.bgColor}`} />
-                <h3 className="text-sm font-bold text-[#0d121c] dark:text-white">{block.title}</h3>
-              </div>
-              <p className="text-xs text-primary font-medium mb-3">{block.whenToUse}</p>
-              <div className="space-y-2">
-                <div>
-                  <p className="text-[10px] font-bold text-green-600 uppercase tracking-wider">✓ Sí incluye</p>
-                  <ul className="mt-1 space-y-0.5">
-                    {block.includes.slice(0, 3).map((item, i) => (
-                      <li key={i} className="text-xs text-gray-600 dark:text-gray-400">{item}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div>
-                  <p className="text-[10px] font-bold text-red-500 uppercase tracking-wider">✗ No incluye</p>
-                  <ul className="mt-1 space-y-0.5">
-                    {block.excludes.slice(0, 2).map((item, i) => (
-                      <li key={i} className="text-xs text-gray-500 dark:text-gray-500">{item}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
           ))}
         </div>
 
