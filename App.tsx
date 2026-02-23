@@ -15,7 +15,7 @@ import { Session } from '@supabase/supabase-js';
 const App: React.FC = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
-  const [currentView, setCurrentView] = useState<View>(View.DASHBOARD);
+  const [currentView, setCurrentView] = useState<View>(View.SELECTION);
   const [blocks, setBlocks] = useState<EnergyBlock[]>(ENERGY_BLOCKS);
   const [activeBreaks, setActiveBreaks] = useState<ActiveBreak[]>(ACTIVE_BREAKS);
   const [supabaseConfig, setSupabaseConfig] = useState<SupabaseConfig>(() => api.getConfig());
