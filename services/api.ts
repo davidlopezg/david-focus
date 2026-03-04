@@ -28,8 +28,10 @@ class ApiService {
         } else {
             this.config = { url: DEFAULT_URL, anonKey: DEFAULT_KEY };
         }
-
+    
         this.supabase = createClient(this.config.url, this.config.anonKey);
+
+        console.log('Supabase config on init:', this.config); // Log for debugging
     }
 
     getConfig(): SupabaseConfig {
