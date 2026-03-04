@@ -21,15 +21,15 @@ const App: React.FC = () => {
   const [supabaseConfig, setSupabaseConfig] = useState<SupabaseConfig>(() => api.getConfig());
   const [activeBlock, setActiveBlock] = useState<EnergyBlock | null>(null);
   const [activeBreak, setActiveBreak] = useState<ActiveBreak | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useEffect(() => {
-    // Check initial session
     api.getSession().then((session) => {
       setSession(session);
       setLoading(false);
     });
 
-    // Listen for auth changes
     const { data: { subscription } } = api.onAuthStateChange((_event, session) => {
       setSession(session);
     });
@@ -40,6 +40,16 @@ const App: React.FC = () => {
   useEffect(() => {
     api.setConfig(supabaseConfig);
   }, [supabaseConfig]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleSelectBlock = useCallback((blockId: BlockType) => {
     const block = blocks.find(b => b.id === blockId);
@@ -74,6 +84,9 @@ const App: React.FC = () => {
   const handleSignOut = async () => {
     await api.signOut();
   };
+
+  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
   if (loading) {
     return (
@@ -133,16 +146,25 @@ const App: React.FC = () => {
   const isFullScreenView = currentView === View.TIMER || currentView === View.BREAK_TIMER;
 
   return (
-    <div className="flex h-screen w-full overflow-hidden font-sans">
+    <div className={`flex h-screen w-full overflow-hidden font-sans ${isMobile ? 'pb-16' : ''}`}>
       {!isFullScreenView && (
         <Sidebar
           currentView={currentView}
-          onNavigate={(view) => setCurrentView(view)}
-          onSignOut={handleSignOut}
+          onNavigate={(view) => {
+            setCurrentView(view);
+            closeMobileMenu();
+          }}
+          onSignOut={() => {
+            handleSignOut();
+            closeMobileMenu();
+          }}
+          isMobile={isMobile}
+          isMobileMenuOpen={isMobileMenuOpen}
+          toggleMobileMenu={toggleMobileMenu}
         />
       )}
 
-      <main className={`flex-1 overflow-hidden relative ${isFullScreenView ? 'w-full' : ''}`}>
+      <main className={`flex-1 overflow-hidden relative ${isFullScreenView ? 'w-full' : ''} ${isMobileMenuOpen && isMobile ? 'translate-x-64 md:translate-x-0' : ''} transition-transform md:transition-none`}>
         {renderContent()}
       </main>
     </div>
