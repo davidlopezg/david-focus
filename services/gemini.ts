@@ -67,7 +67,7 @@ class GeminiService {
   private baseUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
   constructor() {
-    this.apiKey = import.meta.env.VITE_GOOGLE_API_KEY || import.meta.env.GEMINI_API_KEY || '';
+    this.apiKey = import.meta.env.VITE_GOOGLE_API_KEY || import.meta.env.VITE_GEMINI_API_KEY || import.meta.env.GEMINI_API_KEY || '';
   }
 
   isConfigured(): boolean {

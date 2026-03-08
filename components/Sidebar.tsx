@@ -13,9 +13,9 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ currentView, onNavigate, onSignOut, isMobile, isMobileMenuOpen, toggleMobileMenu }) => {
   const menuItems = [
-    { id: View.SELECTION, label: 'Bloques', icon: 'view_agenda' },
-    { id: View.TASK_CLASSIFIER, label: 'Clasificador', icon: 'auto_awesome' },
-    { id: View.DASHBOARD, label: 'Estadísticas', icon: 'bar_chart' },
+    { id: View.SELECTION, label: 'Bloques', mobileLabel: 'Bloques', icon: 'view_agenda' },
+    { id: View.TASK_CLASSIFIER, label: 'Clasificador', mobileLabel: 'IA', icon: 'auto_awesome' },
+    { id: View.DASHBOARD, label: 'Estadisticas', mobileLabel: 'Stats', icon: 'bar_chart' },
   ];
 
   if (isMobile) {
@@ -118,12 +118,12 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onNavigate, onSignOut, i
 
         {/* Bottom Navigation */}
         <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-[#1a202c] border-t border-[#ced7e8] dark:border-gray-800 z-40">
-          <div className="flex items-center justify-evenly py-2">
+          <div className="grid grid-cols-4 items-center py-2">
             {menuItems.map((item) => (
               <button
                 key={item.label}
                 onClick={() => onNavigate(item.id)}
-                className={`flex flex-col items-center px-4 py-1 rounded-lg transition-all ${currentView === item.id
+                className={`flex flex-col items-center justify-center py-1 rounded-lg transition-all ${currentView === item.id
                   ? 'text-primary'
                   : 'text-[#49659c] dark:text-gray-400 hover:text-[#0d121c] dark:hover:text-white'
                   }`}
@@ -131,12 +131,12 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onNavigate, onSignOut, i
                 <span className={`material-symbols-outlined text-2xl ${currentView === item.id ? 'fill-icon' : ''}`}>
                   {item.icon}
                 </span>
-                <span className="text-xs mt-0.5">{item.label}</span>
+                <span className="text-[11px] mt-0.5">{item.mobileLabel}</span>
               </button>
             ))}
             <button
               onClick={() => onNavigate(View.SETTINGS)}
-              className={`flex flex-col items-center px-4 py-1 rounded-lg transition-all ${currentView === View.SETTINGS
+              className={`flex flex-col items-center justify-center py-1 rounded-lg transition-all ${currentView === View.SETTINGS
                 ? 'text-primary'
                 : 'text-[#49659c] dark:text-gray-400 hover:text-[#0d121c] dark:hover:text-white'
                 }`}
