@@ -20,16 +20,14 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
-      - name: Set up Vite
-        run: echo "$PATH" | grep -q node_modules/.bin && echo "Vite in PATH" || echo "Adding Vite to PATH"
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Build
-        run: node_modules/.bin/vite build
+        run: node ./node_modules/vite/bin/vite.js build
         env:
           VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ vars.VITE_SUPABASE_ANON_KEY }}
-          VITE_GEMINI_API_KEY: ${{ vars.GEMINI_API_KEY }}
+          VITE_GEMINI_API_KEY: ${{ vars.GEMINI_API_KEY != '' && vars.GEMINI_API_KEY || secrets.GEMINI_API_KEY }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
