@@ -181,6 +181,26 @@ class ApiService {
             return null;
         }
     }
+
+    async saveTaskClassification(tasksText: string, result: string): Promise<boolean> {
+        try {
+            const user = await this.getUser();
+            const { error } = await this.supabase
+                .from('task_classifications')
+                .insert([{
+                    tasks_text: tasksText,
+                    result: result,
+                    user_id: user?.id,
+                    created_at: new Date().toISOString()
+                }]);
+
+            if (error) throw error;
+            return true;
+        } catch (error) {
+            console.error('Error saving task classification to Supabase:', error);
+            return false;
+        }
+    }
 }
 
 export const api = new ApiService();

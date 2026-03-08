@@ -8,6 +8,7 @@ import TimerOverlay from './components/TimerOverlay';
 import BreakTimerOverlay from './components/BreakTimerOverlay';
 import Settings from './components/Settings';
 import Login from './components/Login';
+import TaskClassifier from './components/TaskClassifier';
 import { ENERGY_BLOCKS, ACTIVE_BREAKS } from './constants';
 import { api, SupabaseConfig } from './services/api';
 import { Session } from '@supabase/supabase-js';
@@ -138,6 +139,8 @@ const App: React.FC = () => {
             onClose={handleCloseSession}
           />
         ) : null;
+      case View.TASK_CLASSIFIER:
+        return <TaskClassifier />;
       default:
         return <Dashboard />;
     }

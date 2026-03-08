@@ -4,7 +4,8 @@ export enum View {
   SELECTION = 'SELECTION',
   TIMER = 'TIMER',
   BREAK_TIMER = 'BREAK_TIMER',
-  SETTINGS = 'SETTINGS'
+  SETTINGS = 'SETTINGS',
+  TASK_CLASSIFIER = 'TASK_CLASSIFIER'
 }
 
 export enum BlockType {
@@ -54,4 +55,11 @@ export interface SessionRecord {
   duration: number;
   efficiency: number;
   date: string;
+}
+
+export interface TaskClassification {
+  id: string;
+  tasks_text: string;
+  result: string;
+  created_at: string;
 }

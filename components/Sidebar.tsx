@@ -14,6 +14,7 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ currentView, onNavigate, onSignOut, isMobile, isMobileMenuOpen, toggleMobileMenu }) => {
   const menuItems = [
     { id: View.SELECTION, label: 'Bloques', icon: 'view_agenda' },
+    { id: View.TASK_CLASSIFIER, label: 'Clasificador', icon: 'auto_awesome' },
     { id: View.DASHBOARD, label: 'Estadísticas', icon: 'bar_chart' },
   ];
 
