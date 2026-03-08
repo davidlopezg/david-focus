@@ -20,10 +20,12 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
+      - name: Set up Vite
+        run: echo "$PATH" | grep -q node_modules/.bin && echo "Vite in PATH" || echo "Adding Vite to PATH"
       - name: Install dependencies
         run: npm install
       - name: Build
-        run: npm run build
+        run: node_modules/.bin/vite build
         env:
           VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ vars.VITE_SUPABASE_ANON_KEY }}
