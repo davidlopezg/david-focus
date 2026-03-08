@@ -4,6 +4,7 @@ Proposito
 ---------
 Tomar una lista de tareas y organizarlas en 4 bloques de foco (Regular, Estrategia, Ejecucion y Mecanica) segun su tipo de carga mental y su naturaleza operativa.
 
+
 Entrada esperada
 ----------------
 - Lista de tareas en lenguaje natural (una o varias).
