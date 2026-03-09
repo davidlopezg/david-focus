@@ -101,7 +101,8 @@ class GeminiService {
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error?.message || `Error API: ${response.status}`);
+        const message = error.error?.message || `Error API: ${response.status}`;
+        throw new Error(this.normalizeApiError(message));
       }
 
       const data = await response.json();
@@ -114,8 +115,25 @@ class GeminiService {
       return this.parseResponse(text);
     } catch (error) {
       console.error('Error classifying tasks:', error);
-      throw error;
+      if (error instanceof Error) {
+        throw new Error(this.normalizeApiError(error.message));
+      }
+      throw new Error('Error inesperado al clasificar tareas.');
     }
+  }
+
+  private normalizeApiError(message: string): string {
+    const lower = message.toLowerCase();
+
+    if (lower.includes('reported as leaked') || lower.includes('api key not valid')) {
+      return 'Tu API key fue bloqueada o no es valida. Crea una nueva en Google AI Studio y actualiza VITE_GOOGLE_API_KEY en GitHub Variables/Secrets y en tu .env.local.';
+    }
+
+    if (lower.includes('permission denied') || lower.includes('forbidden')) {
+      return 'No hay permisos para usar esta API key. Revisa que la key de Google AI Studio este activa y con acceso a Gemini API.';
+    }
+
+    return message;
   }
 
   private parseResponse(text: string): ClassificationResult {
